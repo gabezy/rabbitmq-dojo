@@ -1,0 +1,19 @@
+poupex-dojo:
+  direct-routing-key: direct-queue
+  fanout-exchange: amq.fanout
+  topic-exchange: amq.topic
+  queue:
+    direct: direct-queue
+    fanout-queue: fanout-queue
+    fanout-queue-2: fanout-queue-2
+    arquivos-topic-queue: arquivos-topic-queue
+    assuntos-topic-queue: assuntos-topic-queue
+    pagamentos-topic-queue: pagamentos-topic-queue
+---
+spring:
+  application:
+    name: poupex-dojo
+  rabbitmq:
+    port: 5672
+    username: myuser
+    password: secret

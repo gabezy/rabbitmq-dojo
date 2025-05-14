@@ -11,7 +11,7 @@ public class DirectConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DirectConsumer.class);
 
-    @RabbitListener(queues = "${poupex-dojo.queue.direct}")
+    @RabbitListener(queues = "${poupex-dojo.direct-routing-key}")
     public void receive(MessageDTO message) {
         log.info("Received Message: {}", message);
     }

@@ -6,50 +6,55 @@ import br.com.gabezy.poupexdojo.services.DirectService;
 import br.com.gabezy.poupexdojo.services.FanoutService;
 import br.com.gabezy.poupexdojo.services.TopicService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
-// TODO: Ajustar
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ExtendWith(MockitoExtension.class)
 class MockProducersTest {
 
-    @MockitoBean
+    @Mock
     private RabbitTemplate rabbitTemplate;
 
-    @Autowired
+    @Mock
     private PoupexDojoProperties poupexDojoProperties;
 
-    @Autowired
+    @InjectMocks
     private DirectService directService;
 
-    @Autowired
+    @InjectMocks
     private FanoutService fanoutService;
 
-    @Autowired
+    @InjectMocks
     private TopicService topicService;
 
     @Test
     void deveEnviarMensagemParaDirectExchange() {
         var message = new MessageDTO("Uma mensagem");
 
+        when(poupexDojoProperties.getDirectRoutingKey()).thenReturn("direct-queue");
+
         directService.sendMessage(message);
 
-        verify(rabbitTemplate, times(1)).convertAndSend("", poupexDojoProperties.getDirectRoutingKey(), message);
+        verify(poupexDojoProperties, times(1)).getDirectRoutingKey();
+        verify(rabbitTemplate, times(1)).convertAndSend("", "direct-queue", message);
     }
 
     @Test
     void deveEnviarMensagemParaFanoutExchange() {
         var message = new MessageDTO("Uma mensagem");
 
+        when(poupexDojoProperties.getFanoutExchange()).thenReturn("amq.fanout");
+
         fanoutService.sendMessage(message);
 
-        verify(rabbitTemplate, times(1)).convertAndSend(poupexDojoProperties.getFanoutExchange(), "",  message);
+        verify(poupexDojoProperties, times(1)).getFanoutExchange();
+        verify(rabbitTemplate, times(1)).convertAndSend("amq.fanout", "",  message);
     }
 
 
@@ -59,9 +64,12 @@ class MockProducersTest {
 
         var bindingKey = "bindingKey";
 
+        when(poupexDojoProperties.getTopicExchange()).thenReturn("amq.topic");
+
         topicService.sendMessage(bindingKey, message);
 
-        verify(rabbitTemplate, times(1)).convertAndSend(poupexDojoProperties.getTopicExchange(), bindingKey,  message);
+        verify(poupexDojoProperties, times(1)).getTopicExchange();
+        verify(rabbitTemplate, times(1)).convertAndSend("amq.topic", bindingKey,  message);
     }
 
 

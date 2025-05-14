@@ -37,60 +37,60 @@ public class RabbitMqExchageConfig {
 
     @Bean
     public Queue fanoutQueue() {
-        return QueueBuilder.durable("fanout-queue")
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getFanoutQueue())
                 .build();
     }
 
     @Bean
     public Binding bindingFanoutQueue() {
         return BindingBuilder.bind(fanoutQueue())
-                .to(new FanoutExchange("amq.fanout"));
+                .to(new FanoutExchange(poupexDojoProperties.getFanoutExchange()));
     }
 
     @Bean
     public Queue fanoutQueue2() {
-        return QueueBuilder.durable("fanout-queue-2").build();
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getFanoutQueue2()).build();
     }
 
     @Bean
     public Binding bindingFanoutQueue2() {
         return BindingBuilder.bind(fanoutQueue2())
-                .to(new FanoutExchange("amq.fanout"));
+                .to(new FanoutExchange(poupexDojoProperties.getFanoutExchange()));
     }
 
     @Bean
     public Queue arquivosTopicQueue() {
-        return QueueBuilder.durable("arquivos-topic-queue").build();
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getArquivosTopicQueue()).build();
     }
 
     @Bean
     public Binding bindingArquivosTopicQueue() {
         return BindingBuilder.bind(arquivosTopicQueue())
-                .to(new TopicExchange("amq.topic"))
+                .to(new TopicExchange(poupexDojoProperties.getTopicExchange()))
                 .with("arquivos.#");
     }
 
     @Bean
     public Queue assuntosTopicQueue() {
-        return QueueBuilder.durable("assuntos-topic-queue").build();
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getAssuntosTopicQueue()).build();
     }
 
     @Bean
     public Binding bindingAssuntosTopicQueue() {
         return BindingBuilder.bind(assuntosTopicQueue())
-                .to(new TopicExchange("amq.topic"))
+                .to(new TopicExchange(poupexDojoProperties.getTopicExchange()))
                 .with("assuntos.#");
     }
 
     @Bean
     public Queue pagamentosTopicQueue() {
-        return QueueBuilder.durable("pagamentos-topic-queue").build();
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getPagamentosTopicQueue()).build();
     }
 
     @Bean
     public Binding bindingPagamentosTopicQueue() {
         return BindingBuilder.bind(pagamentosTopicQueue())
-                .to(new TopicExchange("amq.topic"))
+                .to(new TopicExchange(poupexDojoProperties.getTopicExchange()))
                 .with("#.pagamentos.#");
     }
 

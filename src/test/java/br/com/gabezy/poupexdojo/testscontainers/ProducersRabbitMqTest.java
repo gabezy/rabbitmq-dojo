@@ -1,6 +1,5 @@
 package br.com.gabezy.poupexdojo.testscontainers;
 
-import br.com.gabezy.poupexdojo.config.properties.PoupexDojoProperties;
 import br.com.gabezy.poupexdojo.consumers.DirectConsumer;
 import br.com.gabezy.poupexdojo.consumers.FanoutConsumer;
 import br.com.gabezy.poupexdojo.consumers.TopicConsumer;
@@ -9,27 +8,13 @@ import br.com.gabezy.poupexdojo.services.DirectService;
 import br.com.gabezy.poupexdojo.services.FanoutService;
 import br.com.gabezy.poupexdojo.services.TopicService;
 import org.junit.jupiter.api.Test;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.test.RabbitListenerTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
-@RabbitListenerTest
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ProducersTest {
-
-    @Container
-    static RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3-management-alpine");
+class ProducersRabbitMqTest extends BaseRabbitMqTest {
 
     // consumer desabilitado
     @MockitoBean
@@ -47,24 +32,12 @@ class ProducersTest {
     private DirectService directService;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private PoupexDojoProperties poupexDojoProperties;
-
-    private static final String MENSAGEM_EXAMPLO = "uma mensagem";
-    @Autowired
     private FanoutService fanoutService;
+
     @Autowired
     private TopicService topicService;
 
-    @DynamicPropertySource
-    static void setRabbitMQContainer(DynamicPropertyRegistry registry) {
-        registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
-        registry.add("spring.rabbitmq.port", rabbitMQContainer::getAmqpPort);
-        registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
-        registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
-    }
+    private static final String MENSAGEM_EXAMPLO = "uma mensagem";
 
     @Test
     void deveEnviarMessagemParaFilaDirect() {
@@ -78,7 +51,6 @@ class ProducersTest {
         assertThat(mensagemConsumida).isNotNull();
         assertThat(mensagemConsumida.message()).isEqualTo(MENSAGEM_EXAMPLO);
     }
-
 
     @Test
     void deveEnviarMessagemParaFilasFanout() {
@@ -162,7 +134,5 @@ class ProducersTest {
         assertThat(mensagemConsumidaFilaArquivos).isNull();
         assertThat(mensagemConsumidaFilaPagamentos).isNull();
     }
-
-
 
 }

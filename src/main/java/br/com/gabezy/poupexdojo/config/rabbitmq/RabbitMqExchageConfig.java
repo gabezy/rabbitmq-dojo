@@ -36,8 +36,27 @@ public class RabbitMqExchageConfig {
     }
 
     @Bean
+    public FanoutExchange deadLetterFanoutExchange() {
+        return ExchangeBuilder.fanoutExchange(poupexDojoProperties.getDeadLetterFanoutExchange())
+                .build();
+    }
+
+    @Bean
+    public Queue deadLetterFanoutQueue() {
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getDeadLetterFanoutQueue()).build();
+    }
+
+    @Bean
+    public Binding deadLetterFanoutBinding() {
+        return BindingBuilder.bind(deadLetterFanoutQueue()).to(deadLetterFanoutExchange());
+    }
+
+    @Bean
     public Queue fanoutQueue() {
+        int tenSecondsInMiliseconds = 1000 * 10;
         return QueueBuilder.durable(poupexDojoProperties.getQueue().getFanoutQueue())
+                .deadLetterExchange(poupexDojoProperties.getDeadLetterFanoutExchange())
+                .ttl(tenSecondsInMiliseconds)
                 .build();
     }
 

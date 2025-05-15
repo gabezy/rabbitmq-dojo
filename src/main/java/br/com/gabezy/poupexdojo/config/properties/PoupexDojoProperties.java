@@ -9,11 +9,13 @@ public class PoupexDojoProperties {
     private String directRoutingKey;
     private String fanoutExchange;
     private String topicExchange;
+    private String deadLetterFanoutExchange;
     private Queue queue;
 
     public static class Queue {
         private String fanoutQueue;
         private String fanoutQueue2;
+        private String deadLetterFanoutQueue;
         private String arquivosTopicQueue;
         private String assuntosTopicQueue;
         private String pagamentosTopicQueue;
@@ -32,6 +34,14 @@ public class PoupexDojoProperties {
 
         public void setFanoutQueue2(String fanoutQueue2) {
             this.fanoutQueue2 = fanoutQueue2;
+        }
+
+        public String getDeadLetterFanoutQueue() {
+            return deadLetterFanoutQueue;
+        }
+
+        public void setDeadLetterFanoutQueue(String deadLetterFanoutQueue) {
+            this.deadLetterFanoutQueue = deadLetterFanoutQueue;
         }
 
         public String getArquivosTopicQueue() {
@@ -81,6 +91,14 @@ public class PoupexDojoProperties {
 
     public void setTopicExchange(String topicExchange) {
         this.topicExchange = topicExchange;
+    }
+
+    public String getDeadLetterFanoutExchange() {
+        return deadLetterFanoutExchange;
+    }
+
+    public void setDeadLetterFanoutExchange(String deadLetterFanoutExchange) {
+        this.deadLetterFanoutExchange = deadLetterFanoutExchange;
     }
 
     public Queue getQueue() {

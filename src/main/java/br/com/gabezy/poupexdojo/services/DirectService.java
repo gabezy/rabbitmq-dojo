@@ -17,7 +17,7 @@ public class DirectService {
     }
 
     public void sendMessage(MessageDTO message) {
-        rabbitTemplate.convertAndSend("", poupexDojoProperties.getDirectRoutingKey(), message);
+        rabbitTemplate.convertAndSend("", poupexDojoProperties.getQueue().getDirectQueue(), message);
     }
 
 }

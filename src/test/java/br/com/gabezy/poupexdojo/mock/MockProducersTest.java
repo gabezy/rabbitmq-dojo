@@ -37,11 +37,15 @@ class MockProducersTest {
     void deveEnviarMensagemParaDirectExchange() {
         var message = new MessageDTO("Uma mensagem");
 
-        when(poupexDojoProperties.getDirectRoutingKey()).thenReturn("direct-queue");
+        var mockedQueue = mock(PoupexDojoProperties.Queue.class);
+
+        when(poupexDojoProperties.getQueue()).thenReturn(mockedQueue);
+        when(mockedQueue.getDirectQueue()).thenReturn("direct-queue");
 
         directService.sendMessage(message);
 
-        verify(poupexDojoProperties, times(1)).getDirectRoutingKey();
+        verify(poupexDojoProperties, times(1)).getQueue();
+        verify(mockedQueue, times(1)).getDirectQueue();
         verify(rabbitTemplate, times(1)).convertAndSend("", "direct-queue", message);
     }
 

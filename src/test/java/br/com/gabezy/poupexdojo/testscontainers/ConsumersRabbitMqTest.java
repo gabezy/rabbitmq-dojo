@@ -30,7 +30,7 @@ class ConsumersRabbitMqTest extends BaseRabbitMqTest {
 
         var mensagemDTO = new MessageDTO(mensagem);
 
-        rabbitTemplate.convertAndSend("", poupexDojoProperties.getDirectRoutingKey(), mensagemDTO);
+        rabbitTemplate.convertAndSend("", poupexDojoProperties.getQueue().getDirectQueue(), mensagemDTO);
 
         Awaitility.await()
                 .untilAsserted(() ->

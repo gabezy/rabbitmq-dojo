@@ -31,7 +31,7 @@ public class RabbitMqExchageConfig {
 
     @Bean
     public Queue directQueue() {
-        return QueueBuilder.durable(poupexDojoProperties.getDirectRoutingKey())
+        return QueueBuilder.durable(poupexDojoProperties.getQueue().getDirectQueue())
                 .build();
     }
 

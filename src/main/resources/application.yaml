@@ -1,10 +1,9 @@
 poupex-dojo:
-#  TODO: mudar para o objeto de queue para evitar confusão
-  direct-routing-key: direct-queue
   fanout-exchange: amq.fanout
   topic-exchange: amq.topic
   dead-letter-fanout-exchange: fanout.dlx
   queue:
+    direct-queue: direct-queue
     fanout-queue: fanout-queue
     fanout-queue-2: fanout-queue-2
     dead-letter-fanout-queue: fanout-dlq

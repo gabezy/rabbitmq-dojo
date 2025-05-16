@@ -45,8 +45,8 @@ class ProducersRabbitMqTest extends BaseRabbitMqTest {
 
         directService.sendMessage(mensagemParaEnviar);
 
-        MessageDTO mensagemConsumida = rabbitTemplate.receiveAndConvert(poupexDojoProperties.getDirectRoutingKey(), 2_000,
-                ParameterizedTypeReference.forType(MessageDTO.class));
+        MessageDTO mensagemConsumida = rabbitTemplate.receiveAndConvert(poupexDojoProperties.getQueue().getDirectQueue(),
+                2_000, ParameterizedTypeReference.forType(MessageDTO.class));
 
         assertThat(mensagemConsumida).isNotNull();
         assertThat(mensagemConsumida.message()).isEqualTo(MENSAGEM_EXAMPLO);

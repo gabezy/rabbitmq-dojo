@@ -6,19 +6,27 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("poupex-dojo")
 public class PoupexDojoProperties {
 
-    private String directRoutingKey;
     private String fanoutExchange;
     private String topicExchange;
     private String deadLetterFanoutExchange;
     private Queue queue;
 
     public static class Queue {
+        private String directQueue;
         private String fanoutQueue;
         private String fanoutQueue2;
         private String deadLetterFanoutQueue;
         private String arquivosTopicQueue;
         private String assuntosTopicQueue;
         private String pagamentosTopicQueue;
+
+        public String getDirectQueue() {
+            return directQueue;
+        }
+
+        public void setDirectQueue(String directQueue) {
+            this.directQueue = directQueue;
+        }
 
         public String getFanoutQueue() {
             return fanoutQueue;
@@ -67,14 +75,6 @@ public class PoupexDojoProperties {
         public void setPagamentosTopicQueue(String pagamentosTopicQueue) {
             this.pagamentosTopicQueue = pagamentosTopicQueue;
         }
-    }
-
-    public String getDirectRoutingKey() {
-        return directRoutingKey;
-    }
-
-    public void setDirectRoutingKey(String directRoutingKey) {
-        this.directRoutingKey = directRoutingKey;
     }
 
     public String getFanoutExchange() {
